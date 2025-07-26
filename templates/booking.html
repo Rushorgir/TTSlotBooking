@@ -1,0 +1,355 @@
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Plus+Jakarta+Sans%3Awght%40400%3B500%3B700%3B800"
+    />
+
+    <title>Net Booking - {{ formatted_date }}</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  </head>
+  <body>
+    <div class="relative flex size-full min-h-screen flex-col bg-gray-50 group/design-root overflow-x-hidden" style='font-family: "Plus Jakarta Sans", "Noto Sans", sans-serif;'>
+      <div class="layout-container flex h-full grow flex-col">
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#eaeef1] px-10 py-3">
+          <div class="flex items-center gap-4 text-[#101518]">
+            <div class="size-4">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M4 42.4379C4 42.4379 14.0962 36.0744 24 41.1692C35.0664 46.8624 44 42.2078 44 42.2078L44 7.01134C44 7.01134 35.068 11.6577 24.0031 5.96913C14.0971 0.876274 4 7.27094 4 7.27094L4 42.4379Z"
+                  fill="currentColor"
+                ></path>
+              </svg>
+            </div>
+            <h2 class="text-[#101518] text-lg font-bold leading-tight tracking-[-0.015em]">Net Booking</h2>
+          </div>
+          <nav class="flex items-center gap-4">
+            <a href="/" class="text-[#5c778a] hover:text-[#101518] text-sm font-medium">Home</a>
+          </nav>
+        </header>
+
+        <!-- Loading indicator -->
+        <div id="loading" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div class="bg-white p-4 rounded-lg">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
+            <p class="mt-2 text-sm text-gray-600">Processing...</p>
+          </div>
+        </div>
+
+        <div class="px-40 flex flex-1 justify-center py-5">
+          <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+            <div class="flex flex-wrap justify-between gap-3 p-4">
+              <div class="flex min-w-72 flex-col gap-3">
+                <p class="text-[#101518] tracking-light text-[32px] font-bold leading-tight">Book Your Net Slot</p>
+                <p class="text-[#5c778a] text-sm font-normal leading-normal">Select your preferred time slots for {{ formatted_date }}</p>
+              </div>
+            </div>
+
+            <!-- User Details Form -->
+            <div class="px-4 py-3">
+              <div class="bg-white rounded-xl border border-[#d4dde2] p-6">
+                <h3 class="text-[#101518] text-lg font-bold mb-4">Your Details</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label class="block text-[#101518] text-sm font-medium mb-2">Name *</label>
+                    <input type="text" id="userName" class="w-full px-3 py-2 border border-[#d4dde2] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your name" required>
+                  </div>
+                  <div>
+                    <label class="block text-[#101518] text-sm font-medium mb-2">Phone Number *</label>
+                    <input type="tel" id="userPhone" class="w-full px-3 py-2 border border-[#d4dde2] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your phone number" required>
+                  </div>
+                  <div>
+                    <label class="block text-[#101518] text-sm font-medium mb-2">Room Number *</label>
+                    <input type="text" id="userRoom" class="w-full px-3 py-2 border border-[#d4dde2] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your room number" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Time Slots Grid -->
+            <div class="px-4 py-3">
+              <div class="bg-white rounded-xl border border-[#d4dde2] p-6">
+                <h3 class="text-[#101518] text-lg font-bold mb-4">Available Time Slots</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="slotsContainer">
+                  {% for slot in slots %}
+                  <div class="border border-[#d4dde2] rounded-lg p-4 {% if slot.get('is_disabled', False) %}bg-gray-100 cursor-not-allowed{% elif slot.is_booked %}bg-red-50 cursor-not-allowed{% else %}bg-green-50 cursor-pointer hover:bg-green-100{% endif %} slot-item" 
+                       data-slot-id="{{ slot.id }}" 
+                       data-time="{{ slot.time_slot }}"
+                       data-net="{{ slot.net_number }}"
+                       {% if slot.is_booked %}data-booked="true"{% endif %}
+                       {% if slot.get('is_disabled', False) %}data-disabled="true"{% endif %}>
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <p class="text-[#101518] font-medium">{{ slot.time_slot }}</p>
+                        <p class="text-[#5c778a] text-sm">Net {{ slot.net_number }}</p>
+                      </div>
+                      <div class="flex items-center">
+                        {% if slot.get('is_disabled', False) %}
+                          <span class="text-gray-600 text-sm font-medium">Not Available</span>
+                        {% elif slot.is_booked %}
+                          <span class="text-red-600 text-sm font-medium">Booked</span>
+                        {% else %}
+                          <input type="checkbox" class="slot-checkbox w-5 h-5 text-blue-600 rounded focus:ring-blue-500" 
+                                 data-slot-id="{{ slot.id }}" 
+                                 data-cost="40">
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+
+            <!-- Booking Summary -->
+            <div class="px-4 py-3">
+              <div class="bg-white rounded-xl border border-[#d4dde2] p-6">
+                <h3 class="text-[#101518] text-lg font-bold mb-4">Booking Summary</h3>
+                <div id="selectedSlots" class="mb-4">
+                  <p class="text-[#5c778a] text-sm">No slots selected</p>
+                </div>
+                <div class="border-t border-[#d4dde2] pt-4">
+                  <div class="flex justify-between items-center text-lg font-bold text-[#101518]">
+                    <span>Total:</span>
+                    <span id="totalAmount">₹0</span>
+                  </div>
+                  <p class="text-[#5c778a] text-sm mt-1">Cost per slot: ₹40</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Payment Section -->
+            <div class="px-4 py-3">
+              <div class="bg-white rounded-xl border border-[#d4dde2] p-6">
+                <h3 class="text-[#101518] text-lg font-bold mb-4">Payment</h3>
+                <div class="mb-4">
+                  <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                    <div class="flex items-center">
+                      <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                        </svg>
+                      </div>
+                      <div class="ml-3">
+                        <p class="text-sm text-blue-700">
+                          Please ensure you have selected at least one time slot and filled in your details before proceeding with payment.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 class="text-[#101518] font-medium mb-3">Payment Method</h4>
+                    <div class="space-y-3">
+                      <label class="flex items-center">
+                        <input type="radio" name="paymentMethod" value="upi" class="mr-2" checked>
+                        <span class="text-sm">UPI Payment</span>
+                      </label>
+                      <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <h5 class="text-sm font-medium text-blue-800 mb-2">Scan QR Code to Pay</h5>
+                        <div class="flex justify-center mb-2">
+                          <img src="{{ url_for('static', filename='qr.jpeg') }}" 
+                               alt="UPI QR Code" 
+                               class="w-32 h-32 border border-gray-300 rounded-lg">
+                        </div>
+                        <p class="text-xs text-blue-600 text-center">
+                          Scan with any UPI app to pay
+                        </p>
+                      </div>
+                      <div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded">
+                        <p class="text-xs text-amber-700">
+                          <strong>Note:</strong> After payment, click "Proceed to Payment" button. Your booking will be pending admin approval.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 class="text-[#101518] font-medium mb-3">Payment Summary</h4>
+                    <div class="bg-gray-50 p-3 rounded-lg">
+                      <div class="flex justify-between text-sm mb-1">
+                        <span>Slots (<span id="slotCount">0</span>):</span>
+                        <span id="subtotal">₹0</span>
+                      </div>
+                      <div class="flex justify-between text-sm mb-1">
+                        <span>Processing Fee:</span>
+                        <span>₹0</span>
+                      </div>
+                      <div class="border-t pt-2 mt-2">
+                        <div class="flex justify-between font-bold">
+                          <span>Total Amount:</span>
+                          <span id="finalTotal">₹0</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mt-6 flex justify-center">
+                  <button id="proceedPayment" 
+                          class="flex items-center justify-center rounded-full h-12 px-8 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white text-base font-bold leading-normal tracking-[0.015em] transition-colors shadow-md"
+                          disabled>
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                    </svg>
+                    <span>Submit Payment Request</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let selectedSlots = [];
+      const SLOT_COST = 40;
+
+      document.addEventListener('DOMContentLoaded', function() {
+        const checkboxes = document.querySelectorAll('.slot-checkbox');
+        const proceedButton = document.getElementById('proceedPayment');
+        const userNameInput = document.getElementById('userName');
+        const userPhoneInput = document.getElementById('userPhone');
+        const userRoomInput = document.getElementById('userRoom');
+
+        checkboxes.forEach(checkbox => {
+          checkbox.addEventListener('change', function() {
+            updateSelectedSlots();
+            updatePaymentSection();
+            toggleProceedButton();
+          });
+        });
+
+        userNameInput.addEventListener('input', toggleProceedButton);
+        userPhoneInput.addEventListener('input', toggleProceedButton);
+        userRoomInput.addEventListener('input', toggleProceedButton);
+
+        proceedButton.addEventListener('click', function() {
+          if (selectedSlots.length === 0) {
+            alert('Please select at least one time slot.');
+            return;
+          }
+
+          const userName = userNameInput.value.trim();
+          const userPhone = userPhoneInput.value.trim();
+          const userRoom = userRoomInput.value.trim();
+
+          if (!userName || !userPhone || !userRoom) {
+            alert('Please fill in your name, phone number, and room number.');
+            return;
+          }
+
+          // Here you would integrate with a real payment gateway
+          // For now, we'll simulate the booking process
+          processBooking(userName, userPhone, userRoom);
+        });
+
+        function updateSelectedSlots() {
+          selectedSlots = [];
+          const selectedSlotsDiv = document.getElementById('selectedSlots');
+
+          checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+              const slotItem = checkbox.closest('.slot-item');
+              const timeSlot = slotItem.dataset.time;
+              const netNumber = slotItem.dataset.net;
+              const slotId = checkbox.dataset.slotId;
+
+              selectedSlots.push({
+                id: slotId,
+                time: timeSlot,
+                net: netNumber,
+                cost: SLOT_COST
+              });
+            }
+          });
+
+          if (selectedSlots.length === 0) {
+            selectedSlotsDiv.innerHTML = '<p class="text-[#5c778a] text-sm">No slots selected</p>';
+          } else {
+            let slotsHtml = '<div class="space-y-2">';
+            selectedSlots.forEach(slot => {
+              slotsHtml += `
+                <div class="flex justify-between items-center text-sm">
+                  <span>${slot.time} - Net ${slot.net}</span>
+                  <span class="font-medium">₹${slot.cost}</span>
+                </div>
+              `;
+            });
+            slotsHtml += '</div>';
+            selectedSlotsDiv.innerHTML = slotsHtml;
+          }
+
+          const totalAmount = selectedSlots.length * SLOT_COST;
+          document.getElementById('totalAmount').textContent = `₹${totalAmount}`;
+        }
+
+        function updatePaymentSection() {
+          const slotCount = selectedSlots.length;
+          const subtotal = slotCount * SLOT_COST;
+
+          document.getElementById('slotCount').textContent = slotCount;
+          document.getElementById('subtotal').textContent = `₹${subtotal}`;
+          document.getElementById('finalTotal').textContent = `₹${subtotal}`;
+        }
+
+        function toggleProceedButton() {
+          const userName = userNameInput.value.trim();
+          const userPhone = userPhoneInput.value.trim();
+          const userRoom = userRoomInput.value.trim();
+          const hasSelectedSlots = selectedSlots.length > 0;
+
+          proceedButton.disabled = !(userName && userPhone && userRoom && hasSelectedSlots);
+        }
+
+        function processBooking(userName, userPhone, userRoom) {
+          document.getElementById('loading').classList.remove('hidden');
+
+          const bookingData = {
+            user_name: userName,
+            user_phone: userPhone,
+            user_room: userRoom,
+            selected_slots: selectedSlots.map(slot => parseInt(slot.id)),
+            total_amount: selectedSlots.length * SLOT_COST,
+            payment_method: document.querySelector('input[name="paymentMethod"]:checked').value
+          };
+
+          fetch('/toggle_booking', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(bookingData)
+          })
+          .then(response => response.json())
+          .then(data => {
+            document.getElementById('loading').classList.add('hidden');
+            if (data.success) {
+              if (data.pending) {
+                alert(`Payment request submitted! Your booking is pending admin approval. You will be notified once confirmed.`);
+              } else {
+                alert(`Booking successful! Total amount: ₹${bookingData.total_amount}`);
+              }
+              location.reload();
+            } else {
+              alert('Booking failed: ' + data.message);
+            }
+          })
+          .catch(error => {
+            document.getElementById('loading').classList.add('hidden');
+            console.error('Error:', error);
+            alert('An error occurred while processing your booking.');
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
