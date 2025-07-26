@@ -27,9 +27,6 @@ A modern web application for renting and managing Table Tennis (TT) Net rental s
 
 ---
 
-
----
-
 ## 📄 **License**
 
 This project is licensed under the **MIT License**.  
