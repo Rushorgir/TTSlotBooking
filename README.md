@@ -1,6 +1,6 @@
 # 🧭 **TT Net Renting Website**
 
-A modern web application for renting and managing Table Tennis (TT) Net rental slots. This platform provides customers with a seamless booking experience via a clean, user-friendly interface and equips admins with the tools necessary to manage bookings and monitor the service.
+A modern web application for renting and managing Table Tennis (TT) Net rental slots for D1 Hostel, VIT Chennai. This platform offers customers a seamless booking experience through a clean, user-friendly interface, while equipping administrators with the necessary tools to manage bookings and monitor the service.
 
 ---
 
