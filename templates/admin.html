@@ -1,0 +1,380 @@
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Plus+Jakarta+Sans%3Awght%40400%3B500%3B700%3B800"
+    />
+
+    <title>Admin Dashboard - Net Booking</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  </head>
+  <body>
+    <div class="relative flex size-full min-h-screen flex-col bg-gray-50 group/design-root overflow-x-hidden" style='font-family: "Plus Jakarta Sans", "Noto Sans", sans-serif;'>
+      <div class="layout-container flex h-full grow flex-col">
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#eaeef1] px-10 py-3">
+          <div class="flex items-center gap-4 text-[#101518]">
+            <div class="size-4">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M4 42.4379C4 42.4379 14.0962 36.0744 24 41.1692C35.0664 46.8624 44 42.2078 44 42.2078L44 7.01134C44 7.01134 35.068 11.6577 24.0031 5.96913C14.0971 0.876274 4 7.27094 4 7.27094L4 42.4379Z"
+                  fill="currentColor"
+                ></path>
+              </svg>
+            </div>
+            <h2 class="text-[#101518] text-lg font-bold leading-tight tracking-[-0.015em]">Admin Dashboard</h2>
+          </div>
+          <nav class="flex items-center gap-4">
+            <a href="/" class="text-[#5c778a] hover:text-[#101518] text-sm font-medium">Home</a>
+            <a href="/booking" class="text-[#5c778a] hover:text-[#101518] text-sm font-medium">Bookings</a>
+          </nav>
+        </header>
+
+        <div class="px-40 flex flex-1 justify-center py-5">
+          <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+            <div class="flex flex-wrap justify-between gap-3 p-4">
+              <div class="flex min-w-72 flex-col gap-3">
+                <p class="text-[#101518] tracking-light text-[32px] font-bold leading-tight">All Bookings</p>
+                <p class="text-[#5c778a] text-sm font-normal leading-normal">Overview of all confirmed bookings</p>
+              </div>
+            </div>
+
+            <div id="status-message" class="hidden mx-4 mb-4 p-3 rounded-lg"></div>
+
+            <!-- Pending Booking Requests -->
+            {% if pending_requests %}
+            <div class="px-4 py-3 @container mb-6">
+              <div class="flex overflow-hidden rounded-xl border border-[#d4dde2] bg-white">
+                <div class="w-full">
+                  <div class="bg-yellow-50 px-4 py-3">
+                    <h4 class="text-[#101518] text-lg font-medium">Pending Booking Requests</h4>
+                    <p class="text-[#5c778a] text-sm">Review and approve/reject payment requests</p>
+                  </div>
+
+                  <div class="p-4 space-y-4">
+                    {% for request in pending_requests %}
+                    <div class="border border-yellow-200 rounded-lg p-4 bg-yellow-50">
+                      
+                      <div class="flex justify-between items-start">
+                        <div>
+                          <h5 class="font-medium text-[#101518]">{{ request.user_name }}</h5>
+                          <p class="text-sm text-[#5c778a]">{{ request.user_phone }}</p>
+                          <p class="text-sm text-[#5c778a]">Room: {{ request.user_room }}</p>
+                          <p class="text-sm text-[#5c778a]">Requested: {{ request.request_time }}</p>
+                        </div>
+                        <div class="text-right">
+                          <p class="font-bold text-lg text-[#101518]">₹{{ request.total_amount }}</p>
+                          <p class="text-xs text-[#5c778a]">{{ request.payment_method|upper }}</p>
+                        </div>
+                      </div>
+
+                      <div class="mb-3">
+                        <h6 class="text-sm font-medium text-[#101518] mb-2">Requested Slots:</h6>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                          {% for slot in request.slots %}
+                          <div class="bg-white border border-gray-200 rounded p-2">
+                            <p class="text-sm font-medium">{{ slot.time_slot }}</p>
+                            <p class="text-xs text-[#5c778a]">{{ slot.date }} - Net {{ slot.net_number }}</p>
+                          </div>
+                          {% endfor %}
+                        </div>
+                      </div>
+
+                      <div class="flex gap-2">
+                        <button onclick="confirmBooking({{ request.id }})" 
+                                class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm">
+                          Confirm Booking
+                        </button>
+                        <button onclick="rejectBooking({{ request.id }})" 
+                                class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm">
+                          Reject Request
+                        </button>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+
+            <div class="flex justify-center py-4">
+              <button id="clearAllBookingsBtn" class="flex items-center justify-center rounded-full h-12 px-8 bg-red-500 hover:bg-red-600 text-white text-base font-bold leading-normal tracking-[0.015em] transition-colors shadow-md">
+                <span>Clear All Bookings</span>
+              </button>
+            </div>
+
+            <!-- All Slots Management -->
+            <div class="px-4 py-3 @container">
+              <div class="flex overflow-hidden rounded-xl border border-[#d4dde2] bg-white">
+                <div class="w-full">
+                  <div class="bg-gray-50 px-4 py-3">
+                    <h4 class="text-[#101518] text-lg font-medium">Manage Time Slots</h4>
+                    <p class="text-[#5c778a] text-sm">View all slots and disable/enable availability</p>
+                  </div>
+
+                  <div class="p-4">
+                    <div class="mb-4">
+                      <label class="block text-[#101518] text-sm font-medium mb-2">Select Date:</label>
+                      <input type="date" id="dateSelector" class="px-3 py-2 border border-[#d4dde2] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      <button id="loadSlotsBtn" class="ml-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Load Slots</button>
+                    </div>
+
+                    <div id="slotsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <!-- Slots will be loaded here -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {% if bookings %}
+            <div class="px-4 py-3 @container mt-6">
+              <div class="flex overflow-hidden rounded-xl border border-[#d4dde2] bg-white">
+                <div class="w-full">
+                  <div class="bg-gray-50 px-4 py-3">
+                    <h4 class="text-[#101518] text-lg font-medium">Current Bookings</h4>
+                  </div>
+                  <table class="flex-1 w-full">
+                    <thead>
+                      <tr class="bg-gray-50">
+                        <th class="px-4 py-3 text-left text-[#101518] text-sm font-medium leading-normal">Date</th>
+                        <th class="px-4 py-3 text-left text-[#101518] text-sm font-medium leading-normal">Time</th>
+                        <th class="px-4 py-3 text-left text-[#101518] text-sm font-medium leading-normal">Net</th>
+                        <th class="px-4 py-3 text-left text-[#101518] text-sm font-medium leading-normal">Booked By</th>
+                        <th class="px-4 py-3 text-left text-[#101518] text-sm font-medium leading-normal">Booking Time</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for booking in bookings %}
+                      <tr class="border-t border-t-[#d4dde2]">
+                        <td class="px-4 py-3 text-[#101518] text-sm font-normal leading-normal">{{ booking.date }}</td>
+                        <td class="px-4 py-3 text-[#101518] text-sm font-normal leading-normal">{{ booking.time_slot }}</td>
+                        <td class="px-4 py-3 text-[#101518] text-sm font-normal leading-normal">Net {{ booking.net_number }}</td>
+                        <td class="px-4 py-3 text-[#101518] text-sm font-normal leading-normal">{{ booking.booked_by or 'N/A' }}</td>
+                        <td class="px-4 py-3 text-[#5c778a] text-sm font-normal leading-normal">{{ booking.booking_time }}</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            {% else %}
+            <div class="px-4 py-8 text-center">
+              <div class="text-gray-400 text-lg">No bookings found</div>
+              <p class="text-gray-500 text-sm mt-2">All booking slots are currently available</p>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const clearAllBtn = document.getElementById('clearAllBookingsBtn');
+        const statusMessage = document.getElementById('status-message');
+        const dateSelector = document.getElementById('dateSelector');
+        const loadSlotsBtn = document.getElementById('loadSlotsBtn');
+        const slotsGrid = document.getElementById('slotsGrid');
+
+        // Set default date to today
+        dateSelector.value = new Date().toISOString().split('T')[0];
+
+        if (clearAllBtn) {
+          clearAllBtn.addEventListener('click', clearAllBookings);
+        }
+
+        if (loadSlotsBtn) {
+          loadSlotsBtn.addEventListener('click', loadSlots);
+          // Load slots for today by default
+          loadSlots();
+        }
+
+        function showMessage(message, type = 'success') {
+          statusMessage.className = `mx-4 mb-4 p-3 rounded-lg ${type === 'success' ? 'bg-green-100 text-green-700 border border-green-200' : 'bg-red-100 text-red-700 border border-red-200'}`;
+          statusMessage.textContent = message;
+          statusMessage.classList.remove('hidden');
+
+          setTimeout(() => {
+            statusMessage.classList.add('hidden');
+          }, 5000);
+        }
+
+        async function loadSlots() {
+          const selectedDate = dateSelector.value;
+          if (!selectedDate) {
+            showMessage('Please select a date', 'error');
+            return;
+          }
+
+          try {
+            const response = await fetch(`/api/bookings/${selectedDate}`);
+            const slots = await response.json();
+
+            slotsGrid.innerHTML = '';
+
+            slots.forEach(slot => {
+              const slotDiv = document.createElement('div');
+              const isDisabled = slot.is_disabled || false;
+              const isBooked = slot.is_booked || false;
+
+              let statusClass = 'bg-green-50';
+              let statusText = 'Available';
+              let buttonText = 'Disable';
+              let buttonClass = 'bg-orange-500 hover:bg-orange-600';
+
+              if (isDisabled) {
+                statusClass = 'bg-gray-100';
+                statusText = 'Disabled';
+                buttonText = 'Enable';
+                buttonClass = 'bg-green-500 hover:bg-green-600';
+              } else if (isBooked) {
+                statusClass = 'bg-red-50';
+                statusText = 'Booked';
+                buttonText = 'Disable';
+                buttonClass = 'bg-orange-500 hover:bg-orange-600';
+              }
+
+              slotDiv.className = `border border-[#d4dde2] rounded-lg p-4 ${statusClass}`;
+              slotDiv.innerHTML = `
+                <div class="flex flex-col gap-2">
+                  <div>
+                    <p class="text-[#101518] font-medium">${slot.time_slot}</p>
+                    <p class="text-[#5c778a] text-sm">Net ${slot.net_number}</p>
+                    <p class="text-[#5c778a] text-xs">Status: ${statusText}</p>
+                  </div>
+                  <button onclick="toggleSlotStatus(${slot.id})" 
+                          class="px-3 py-1 text-white text-sm rounded ${buttonClass}">
+                    ${buttonText}
+                  </button>
+                </div>
+              `;
+
+              slotsGrid.appendChild(slotDiv);
+            });
+
+          } catch (error) {
+            console.error('Error loading slots:', error);
+            showMessage('Error loading slots', 'error');
+          }
+        }
+
+        window.confirmBooking = async function(pendingId) {
+          if (confirm('Are you sure you want to confirm this booking request?')) {
+            try {
+              const response = await fetch('/confirm_booking', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ pending_id: pendingId })
+              });
+
+              const data = await response.json();
+
+              if (data.success) {
+                showMessage(data.message, 'success');
+                // Refresh the page after 1 second to show the updated state
+                setTimeout(() => {
+                  window.location.reload();
+                }, 1000);
+              } else {
+                showMessage(data.message || 'An error occurred', 'error');
+              }
+            } catch (error) {
+              console.error('Error:', error);
+              showMessage('Network error. Please try again.', 'error');
+            }
+          }
+        };
+
+        window.rejectBooking = async function(pendingId) {
+          if (confirm('Are you sure you want to reject this booking request?')) {
+            try {
+              const response = await fetch('/reject_booking', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ pending_id: pendingId })
+              });
+
+              const data = await response.json();
+
+              if (data.success) {
+                showMessage(data.message, 'success');
+                // Refresh the page after 1 second to show the updated state
+                setTimeout(() => {
+                  window.location.reload();
+                }, 1000);
+              } else {
+                showMessage(data.message || 'An error occurred', 'error');
+              }
+            } catch (error) {
+              console.error('Error:', error);
+              showMessage('Network error. Please try again.', 'error');
+            }
+          }
+        };
+
+        window.toggleSlotStatus = async function(slotId) {
+          try {
+            const response = await fetch('/toggle_disabled_slot', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ slot_id: slotId })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+              showMessage(data.message, 'success');
+              // Reload slots to show updated status
+              loadSlots();
+            } else {
+              showMessage(data.message || 'An error occurred', 'error');
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            showMessage('Network error. Please try again.', 'error');
+          }
+        };
+
+        async function clearAllBookings() {
+          if (confirm('Are you sure you want to clear all bookings? This action cannot be undone.')) {
+            try {
+              const response = await fetch('/clear_all_bookings', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              });
+
+              const data = await response.json();
+
+              if (data.success) {
+                showMessage(data.message, 'success');
+                // Refresh the page after 1 second to show the updated state
+                setTimeout(() => {
+                  window.location.reload();
+                }, 1000);
+              } else {
+                showMessage(data.message || 'An error occurred', 'error');
+              }
+            } catch (error) {
+              console.error('Error:', error);
+              showMessage('Network error. Please try again.', 'error');
+            }
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
