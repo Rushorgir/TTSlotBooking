@@ -1,19 +1,36 @@
-# 🧭 TT Net Renting Website
+# 🧭 **TT Net Renting Website**
 
-A modern web application for renting and managing TT Net (temporary internet) connections. This website serves as the front-facing interface for customers and admins, enabling users to explore available plans, request rentals, and manage their accounts, while giving admins control over device and order management.
+A modern web application for renting and managing Table Tennis (TT) Net rental slots. This platform provides customers with a seamless booking experience via a clean, user-friendly interface and equips admins with the tools necessary to manage bookings and monitor the service.
 
-## 🌐 Features
+---
 
-- 📄 Browse TT Net rental plans
-- 👤 User registration and login
-- 🛒 Request and manage rentals
-- 📦 Admin panel for managing devices, plans, and users
-- 💳 (Coming Soon) Online payment integration
-- 📱 Mobile-responsive design
+## 🌐 **Features**
 
-## 🛠️ Tech Stack
+- 📄 **Browse and book TT Net rental slots by selecting date and time**  
+- 👤 **User booking interface with form validation and confirmation**  
+- 🛠️ **Admin panel for managing bookings and user details**  
+- 💾 **Data storage using JSON files (simple and lightweight)**  
+- 📱 **Responsive design for optimal viewing on desktop and mobile**  
+- 💳 **(Coming Soon) Online payment integration to enable secure transactions**  
+- 🚀 **Hosted on Vercel for reliable and fast deployment**
 
-- **Frontend:** HTML / CSS / JavaScript *(or React/Next.js/etc — update as needed)*
-- **Backend:** *(If separate — Node.js, Express, Firebase, etc.)*
-- **Database:** *(MongoDB, Firebase, etc.)*
-- **Hosting:** *(Vercel, Netlify, or self-hosted)*
+---
+
+## 🛠️ **Tech Stack**
+
+| **Layer**      | **Technology**              |
+|----------------|-----------------------------|
+| Frontend       | HTML, CSS, JavaScript       |
+| Backend        | Python (Flask)              |
+| Database       | JSON files (local storage)  |
+| Hosting        | Vercel                     |
+
+---
+
+
+---
+
+## 📄 **License**
+
+This project is licensed under the **MIT License**.  
+See the [LICENSE](LICENSE) file for details.
