@@ -1,33 +1,53 @@
-# 🧭 **TT Net Renting Website**
+<!-- Banner -->
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:001F1F,100:00FFD1&height=200&section=header&text=TT%20Net%20Renting%20Website&fontSize=40&fontColor=00FFD1&animation=fadeIn&fontAlignY=35"/>
+</p>
 
-A modern web application for renting and managing Table Tennis (TT) Net rental slots for D1 Hostel, VIT Chennai. This platform offers customers a seamless booking experience through a clean, user-friendly interface, while equipping administrators with the necessary tools to manage bookings and monitor the service.
-
----
-
-## 🌐 **Features**
-
-- 📄 **Browse and book TT Net rental slots by selecting date and time**  
-- 👤 **User booking interface with form validation and confirmation**  
-- 🛠️ **Admin panel for managing bookings and user details**  
-- 💾 **Data storage using JSON files (simple and lightweight)**  
-- 📱 **Responsive design for optimal viewing on desktop and mobile**  
-- 💳 **(Coming Soon) Online payment integration to enable secure transactions**  
-- 🚀 **Hosted on Vercel for reliable and fast deployment**
+<!-- Typing Animation -->
+<p align="center">
+  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=24&pause=1000&color=00FFD1&center=true&vCenter=true&width=700&lines=Seamless+Table+Tennis+Net+Booking;Clean+and+Responsive+UI;Admin+and+User+Friendly;Built+with+Flask+%2B+HTML+CSS+JS"/>
+</p>
 
 ---
 
-## 🛠️ **Tech Stack**
+<p align="center">
+  <img src="https://img.shields.io/badge/license-MIT-00FFD1?style=for-the-badge&logo=none"/>
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white"/>
+  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white"/>
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"/>
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white"/>
+</p>
 
-| **Layer**      | **Technology**              |
-|----------------|-----------------------------|
-| Frontend       | HTML, CSS, JavaScript       |
-| Backend        | Python (Flask)              |
-| Database       | JSON files (local storage)  |
-| Hosting        | Vercel                     |
+> <p align="center">A modern, responsive platform for booking and managing Table Tennis Net slots in D1 Hostel, VIT Chennai.</p>
 
 ---
 
-## 📄 **License**
+## 🌐 Features
+- 📄 **Browse & Book Slots** — Select date & time for TT Net rental.  
+- 👤 **User Interface** — Form validation & instant booking confirmation.  
+- 🛠️ **Admin Panel** — Manage bookings & view user details easily.  
+- 💾 **Lightweight Storage** — JSON-based backend for simplicity.  
+- 📱 **Responsive Design** — Works seamlessly on desktop & mobile.  
+- 💳 **Coming Soon** — Secure online payment integration.  
+- 🚀 **Fast Deployment** — Hosted on Vercel for reliability.
 
-This project is licensed under the **MIT License**.  
-See the [LICENSE](LICENSE) file for details.
+---
+
+## 📦 Installation & Setup
+```bash
+# Clone repository
+git clone https://github.com/YourUsername/TT-Net-Renting
+cd TT-Net-Renting
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run Flask server
+python app.py
+Then open **http://localhost:5000** in your browser.
+```
+
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:001F1F,100:00FFD1&height=120&section=footer"/>
+</p>
