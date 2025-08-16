@@ -1,6 +1,6 @@
 <!-- Banner -->
 <p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:001F1F,100:00FFD1&height=200&section=header&text=TT%20Net%20Renting%20Website&fontSize=40&fontColor=00FFD1&animation=fadeIn&fontAlignY=35"/>
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:8B0000,100:FF6347&height=200&section=header&text=TT%20Net%20Renting%20Website&fontSize=40&fontColor=FFFFFF&animation=fadeIn&fontAlignY=35"/>
 </p>
 
 <!-- Typing Animation -->
