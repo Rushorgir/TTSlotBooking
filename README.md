@@ -8,8 +8,6 @@
   <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=24&pause=1000&color=8B0000&center=true&vCenter=true&width=700&lines=Seamless+Table+Tennis+Net+Booking;Clean+and+Responsive+UI;Admin+and+User+Friendly;Built+with+Flask+%2B+HTML+CSS+JS"/>
 </p>
 
----
-
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
   <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white"/>
@@ -18,7 +16,10 @@
   <img src="https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white"/>
 </p>
 
-<p align="center">A modern, responsive platform for booking and managing Table Tennis Net slots in D1 Hostel, VIT Chennai.</p>
+---
+
+## 📌 Overview
+This is a simple table tennis net rental service designed exclusively for hostel students in VIT Chennai. A modern, responsive platform hosted on Vercel, the platform lets you easily book slots through a clean and intuitive system. Just pick a time, make a quick payment, and enjoy playing without any hassle.
 
 ---
 
@@ -46,6 +47,8 @@ pip install -r requirements.txt
 python app.py
 Then open http://localhost:5000 in your browser.
 ```
+
+---
 
 <p align="center">
   <img src="https://capsule-render.vercel.app/api?type=waving&color=0:8B0000,100:FF6347&height=120&section=footer"/>
