@@ -5,7 +5,7 @@
 
 <!-- Typing Animation -->
 <p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=24&pause=1000&color=00FFD1&center=true&vCenter=true&width=700&lines=Seamless+Table+Tennis+Net+Booking;Clean+and+Responsive+UI;Admin+and+User+Friendly;Built+with+Flask+%2B+HTML+CSS+JS"/>
+  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=24&pause=1000&color=8B0000&center=true&vCenter=true&width=700&lines=Seamless+Table+Tennis+Net+Booking;Clean+and+Responsive+UI;Admin+and+User+Friendly;Built+with+Flask+%2B+HTML+CSS+JS"/>
 </p>
 
 ---
@@ -49,5 +49,5 @@ Then open http://localhost:5000 in your browser.
 ```
 
 <p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:001F1F,100:00FFD1&height=120&section=footer"/>
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:8B0000,100:FF6347&height=120&section=footer"/>
 </p>
