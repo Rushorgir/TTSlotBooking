@@ -19,7 +19,7 @@
   <img src="https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white"/>
 </p>
 
-> <p align="center">A modern, responsive platform for booking and managing Table Tennis Net slots in D1 Hostel, VIT Chennai.</p>
+<p align="center">A modern, responsive platform for booking and managing Table Tennis Net slots in D1 Hostel, VIT Chennai.</p>
 
 ---
 
